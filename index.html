@@ -7,17 +7,19 @@
 </head>
 <body>
   <h1>Quick start JavaScript Carbone SDK</h1>
-  <input type="file" id="inputFile" name="template" /><br/>
+  <!--><input type="file" id="inputFile" name="template" /><br/>-->
   <textarea name="data" id="inputData" cols="30" rows="10" ></textarea><br/>
   <button onclick="render()">Render report and download</button> <span id="logAdd"></span>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js" integrity="sha512-WiGQZv8WpmQVRUFXZywo7pHIO0G/o3RyiAJZj8YXNN4AV7ReR1RYWVmZJ6y3H06blPcjJmG/sBpOVZjTSFFlzQ==" crossorigin="anonymous"></script>
+  <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
   <script src="carbone.js"></script>
 
   <script>
-    //log input
-    const queryString = window.location.search;
-    console.log(queryString);
+      grist.ready();
+      grist.onRecord(function(record) {
+        document.getElementById('data').innerHTML = JSON.stringify(record, null, 2);
+      });
     
     // SDK constructor, the access token have to be passed as an argument to carboneRenderSDK
     const _carboneService = window.carboneRenderSDK("test_eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzOTI5IiwiYXVkIjoiY2FyYm9uZSIsImV4cCI6MjI0NjYyNDUzNSwiZGF0YSI6eyJpZEFjY291bnQiOjM5Mjl9fQ.AUA3iAH9OuA-wtXuQMfsOScuigcTbHOTldLQT4lJ4y1NSc-eTQIagD_VE19UmjcVc0o1jybxkjl9M14Ikkxmmu5lAPj3DBQ4yAO7YcYd_HRVIakUlJ-388mzEz1ivGnls1m1KVB7wJpl2ioh8bvHn37RRLrrSh4GmQ2DNKQ6IIO8ftYF");
