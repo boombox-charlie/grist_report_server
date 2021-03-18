@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Quick start JavaScript Carbone SDK</h1>
-  <input type="file" id="inputFile" name="template" /><br/>
+  <!--<input type="file" id="inputFile" name="template" /><br/>-->
   <textarea name="data" id="inputData" cols="30" rows="10" ></textarea><br/>
   <button onclick="render()">Render report and download</button> <span id="logAdd"></span>
 
@@ -20,7 +20,8 @@
 
     function render() {
       // Template from a file input OR template ID
-      const _template = document.getElementById("inputFile").files[0];
+      // const _template = document.getElementById("inputFile").files[0];
+      const _template = "d7f05eb1217028d0516a0d61f24938dc8d203c2b3760ee967e825bf86b25853a"
       // Data from an input, for example: {"data" :{"firstname":"John","lastname":"Wick"},"convertTo":"pdf"}
       let _data = JSON.parse(document.getElementById("inputData").value);
       // Render the report from a template and a JSON Data
