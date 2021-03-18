@@ -297,4 +297,4 @@ const carboneRenderSDK = function (accessToken) {
 
 window.carboneRenderSDK = carboneRenderSDK;
 // eslint-disable-next-line no-undef
-module.exports = carboneRenderSDK;
+// module.exports = carboneRenderSDK;
