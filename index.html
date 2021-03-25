@@ -16,14 +16,15 @@
   <script src="carbone.js"></script>
 
   <script>
-      const re_escapes = new RegExp('\\\"','ig');
+      function replacer(key, value) {
+        return value.replace(/[\\]/gi, '');
+      }   
       
       grist.ready();
       grist.onRecord(function(record) {
         //let re_escapes = new RegExp('\\\"');
-        let malformed_json = JSON.stringify(record, null, 2);
-        let unescaped_json =  malformed_json.replaceAll(re_escapes,'"');
-        let good_json = unescaped_json.replace("\"{","{").replace("}\"","}")
+        let malformed_json = JSON.stringify(record, replacer, 2);
+        let good_json = malformed_json.replace("\"{","{").replace("}\"","}")
         document.getElementById('inputData').innerHTML = good_json;
       });
     
