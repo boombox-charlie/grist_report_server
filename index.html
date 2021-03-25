@@ -18,8 +18,9 @@
   <script>
       grist.ready();
       grist.onRecord(function(record) {
+        let re_escapes = new RegExp('\\\"');
         let malformed_json = JSON.stringify(record, null, 2);
-        let unescaped_json =  malformed_json.replace(/\\\"/,/\"/);
+        let unescaped_json =  malformed_json.replace(re_escapes,"\"");
         let good_json = unescaped_json.replace("\"{","{").replace("}\"","}")
         document.getElementById('inputData').innerHTML = good_json;
       });
