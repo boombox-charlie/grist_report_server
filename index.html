@@ -30,7 +30,8 @@
       const _template = "d7f05eb1217028d0516a0d61f24938dc8d203c2b3760ee967e825bf86b25853a"
       // Data from an input, for example: {"data" :{"firstname":"John","lastname":"Wick"},"convertTo":"pdf"}
       let raw_data = document.getElementById("inputData").value;
-      let wrapped_data = "{\"data\":" + raw_data + ",\"convertTo\":\"pdf\"}"
+      let consolidated_data = raw_data.replace("\\\"","\"");
+      let wrapped_data = "{\"data\":" + consolidated_data + ",\"convertTo\":\"pdf\"}"
       let _data = JSON.parse(wrapped_data);
       // Render the report from a template and a JSON Data
       _carboneService.render(_template, _data).then(({ content, name }) => {
