@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Render</title>
-</head>
-<body>
-  <h1>Quick start JavaScript Carbone SDK</h1>
-  <!--><input type="file" id="inputFile" name="template" /><br/>-->
-  <textarea name="data" id="inputData" cols="30" rows="10" ></textarea><br/>
-  <button onclick="render()">Render report and download</button> <span id="logAdd"></span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Render</title>
+  </head>
+  <body>
+    <h1>Quick start JavaScript Carbone SDK</h1>
+    <!--<input type="file" id="inputFile" name="template" /><br/>-->
+    <textarea name="data" id="inputData" cols="40" rows="20"></textarea><br />
+    <button onclick="render()">Render report and download</button>
+    <span id="logAdd"></span>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js" integrity="sha512-WiGQZv8WpmQVRUFXZywo7pHIO0G/o3RyiAJZj8YXNN4AV7ReR1RYWVmZJ6y3H06blPcjJmG/sBpOVZjTSFFlzQ==" crossorigin="anonymous"></script>
   <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
@@ -17,7 +18,7 @@
 
   <script>
       function replacer(key, value) {
-        if (key == "References") {
+        if (key == "R" and typeof value === "string") {
           return JSON.parse(value);
         }
         return value;
@@ -25,10 +26,8 @@
       
       grist.ready();
       grist.onRecord(function(record) {
-        //let re_escapes = new RegExp('\\\"');
-        let malformed_json = JSON.stringify(record, replacer, 2);
-        let good_json = malformed_json.replace("\"{","{").replace("}\"","}")
-        document.getElementById('inputData').innerHTML = good_json;
+        let json_string = JSON.stringify(record, replacer, 2);
+        document.getElementById('inputData').innerHTML = json_string;
       });
     
     // SDK constructor, the access token have to be passed as an argument to carboneRenderSDK
@@ -50,4 +49,12 @@
     }
   </script>
 </body> 
+</html>
+
+          // download.js is used to download the file
+          download(content, name);
+        });
+      }
+    </script>
+  </body>
 </html>
