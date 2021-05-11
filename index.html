@@ -17,11 +17,11 @@
 
   <script>
       function replacer(key, value) {
-         if (typeof value === "string"){
-            return value.toString().replace(/[\\]/gi, '');
-         }
-         return value;
-      }   
+        if (key == "References") {
+          return JSON.parse(value);
+        }
+        return value;
+      }  
       
       grist.ready();
       grist.onRecord(function(record) {
