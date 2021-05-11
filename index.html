@@ -12,45 +12,44 @@
     <button onclick="render()">Render report and download</button>
     <span id="logAdd"></span>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js" integrity="sha512-WiGQZv8WpmQVRUFXZywo7pHIO0G/o3RyiAJZj8YXNN4AV7ReR1RYWVmZJ6y3H06blPcjJmG/sBpOVZjTSFFlzQ==" crossorigin="anonymous"></script>
-  <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
-  <script src="carbone.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"
+      integrity="sha512-WiGQZv8WpmQVRUFXZywo7pHIO0G/o3RyiAJZj8YXNN4AV7ReR1RYWVmZJ6y3H06blPcjJmG/sBpOVZjTSFFlzQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
+    <script src="carbone.js"></script>
 
-  <script>
+    <script>
       function replacer(key, value) {
-        if (key == "R" and typeof value === "string") {
+        if (key == "R" && typeof value === "string") {
           return JSON.parse(value);
         }
         return value;
-      }  
-      
+      }
+
       grist.ready();
-      grist.onRecord(function(record) {
+      grist.onRecord(function (record) {
         let json_string = JSON.stringify(record, replacer, 2);
-        document.getElementById('inputData').innerHTML = json_string;
+        document.getElementById("inputData").innerHTML = json_string;
       });
-    
-    // SDK constructor, the access token have to be passed as an argument to carboneRenderSDK
-    const _carboneService = window.carboneRenderSDK("test_eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzOTI5IiwiYXVkIjoiY2FyYm9uZSIsImV4cCI6MjI0NjYyNDUzNSwiZGF0YSI6eyJpZEFjY291bnQiOjM5Mjl9fQ.AUA3iAH9OuA-wtXuQMfsOScuigcTbHOTldLQT4lJ4y1NSc-eTQIagD_VE19UmjcVc0o1jybxkjl9M14Ikkxmmu5lAPj3DBQ4yAO7YcYd_HRVIakUlJ-388mzEz1ivGnls1m1KVB7wJpl2ioh8bvHn37RRLrrSh4GmQ2DNKQ6IIO8ftYF");
 
-    function render() {
-      // Template from a file input OR template ID
-      // const _template = document.getElementById("inputFile").files[0];
-      const _template = "d7f05eb1217028d0516a0d61f24938dc8d203c2b3760ee967e825bf86b25853a"
-      // Data from an input, for example: {"data" :{"firstname":"John","lastname":"Wick"},"convertTo":"pdf"}
-      let raw_data = document.getElementById("inputData").value;
-      let wrapped_data = "{\"data\":" + raw_data + ",\"convertTo\":\"pdf\"}"
-      let _data = JSON.parse(wrapped_data);
-      // Render the report from a template and a JSON Data
-      _carboneService.render(_template, _data).then(({ content, name }) => {
-        // download.js is used to download the file
-        download(content, name);
-      });
-    }
-  </script>
-</body> 
-</html>
+      // SDK constructor, the access token have to be passed as an argument to carboneRenderSDK
+      const _carboneService = window.carboneRenderSDK(
+        "test_eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzOTI5IiwiYXVkIjoiY2FyYm9uZSIsImV4cCI6MjI0NjYyNDUzNSwiZGF0YSI6eyJpZEFjY291bnQiOjM5Mjl9fQ.AUA3iAH9OuA-wtXuQMfsOScuigcTbHOTldLQT4lJ4y1NSc-eTQIagD_VE19UmjcVc0o1jybxkjl9M14Ikkxmmu5lAPj3DBQ4yAO7YcYd_HRVIakUlJ-388mzEz1ivGnls1m1KVB7wJpl2ioh8bvHn37RRLrrSh4GmQ2DNKQ6IIO8ftYF"
+      );
 
+      function render() {
+        // Template from a file input OR template ID
+        // const _template = document.getElementById("inputFile").files[0];
+        const _template =
+          "d7f05eb1217028d0516a0d61f24938dc8d203c2b3760ee967e825bf86b25853a";
+        // Data from an input, for example: {"data" :{"firstname":"John","lastname":"Wick"},"convertTo":"pdf"}
+        let raw_data = document.getElementById("inputData").value;
+        let wrapped_data = '{"data":' + raw_data + ',"convertTo":"pdf"}';
+        let _data = JSON.parse(wrapped_data);
+        // Render the report from a template and a JSON Data
+        _carboneService.render(_template, _data).then(({ content, name }) => {
           // download.js is used to download the file
           download(content, name);
         });
