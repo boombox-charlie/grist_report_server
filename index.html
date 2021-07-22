@@ -18,11 +18,12 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
     <script src="carbone.js"></script>
 
     <script>
       function replacer(key, value) {
-        if (key == "R" && typeof value === "string") {
+        if (["R"].includes(key) && typeof value === "string") {
           return JSON.parse(value);
         }
         return value;
@@ -30,25 +31,35 @@
 
       grist.ready();
       grist.onRecord(function (record) {
+        // add unique ID and generation time to data
+        var d = Date(Date.now());
+        record.generated = new Date().toLocaleString();
+        record.UUID = uuidv4();
+
         let json_string = JSON.stringify(record, replacer, 2);
         document.getElementById("inputData").innerHTML = json_string;
       });
 
       // SDK constructor, the access token have to be passed as an argument to carboneRenderSDK
       const _carboneService = window.carboneRenderSDK(
-        "test_eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzOTI5IiwiYXVkIjoiY2FyYm9uZSIsImV4cCI6MjI0NjYyNDUzNSwiZGF0YSI6eyJpZEFjY291bnQiOjM5Mjl9fQ.AUA3iAH9OuA-wtXuQMfsOScuigcTbHOTldLQT4lJ4y1NSc-eTQIagD_VE19UmjcVc0o1jybxkjl9M14Ikkxmmu5lAPj3DBQ4yAO7YcYd_HRVIakUlJ-388mzEz1ivGnls1m1KVB7wJpl2ioh8bvHn37RRLrrSh4GmQ2DNKQ6IIO8ftYF"
+        "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzOTI5IiwiYXVkIjoiY2FyYm9uZSIsImV4cCI6MjI1MjA3Nzk1MywiZGF0YSI6eyJpZEFjY291bnQiOjM5Mjl9fQ.AdxZc8KIh40StCT1XPpxsCuIS-1RBSaRUKQ4qpJ72RVnuKLnclcP-cUJBOmNXO3uRPtNP-OpMa_LKtDvEHNaEaRuAcM-_HMBfQMhzzji2I8WXbcMQwRa-ZPEflXA8bpjS3SOoVjD1feP8TTJ7Jn-107pnvXWWEcHEL8SSEhvilPREf6u"
       );
 
       function render() {
         // Template from a file input OR template ID
         // const _template = document.getElementById("inputFile").files[0];
-        const _template =
-          "d7f05eb1217028d0516a0d61f24938dc8d203c2b3760ee967e825bf86b25853a";
+        //const _template =
+        //"ae9a7ebd19b6b7845316155c10bf6690b27a99e153917e4f85fabd7feb5cc10b";
         // Data from an input, for example: {"data" :{"firstname":"John","lastname":"Wick"},"convertTo":"pdf"}
         let raw_data = document.getElementById("inputData").value;
         let wrapped_data = '{"data":' + raw_data + ',"convertTo":"pdf"}';
         let _data = JSON.parse(wrapped_data);
+
+        // get template ID from JSON passed by Grist
+        const _template = _data.data.R.template.template_id;
+
         // Render the report from a template and a JSON Data
+
         _carboneService.render(_template, _data).then(({ content, name }) => {
           // download.js is used to download the file
           download(content, name);
