@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tech help</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="technical-help">Technical Help</h1>
+<h2 id="production-documents--automated-printing">Production Documents / automated printing</h2>
+<h3 id="how-it-works">How it works</h3>
+<p>Automated production documents use two differnt services: Grist and <a href="http://Carbone.io">Carbone.io</a>.</p>
+<p>Grist is the source of the data and packges it up in a standard web-friendly format that other services can understand (this format is called JSON).</p>
+<p><a href="http://Carbone.io">Carbone.io</a> takes the packaged data and fills it into a template to produce a finished PDF document.</p>
+<p>There is a little bit of technical glue that makes this all possible.  It is found at <a href="https://github.com/boombox-charlie/grist_report_server">Github</a> (that is also where this page is stored too).<br>
+The window at the right hand side of the Production Planner sheet is actually a completely seperate webpage (<a href="https://boombox-charlie.github.io/grist_report_server/">https://boombox-charlie.github.io/grist_report_server/</a>).  This page is the piece that knows how to get the data from grist, wait until the button is clicked, send it to be processed, then receive and download a PDF.</p>
+<p>to summarize:</p>
+<ul>
+<li>If there are problems with the data, look at grist.</li>
+<li>If the behavior of the button needs to be changed or debugged, look at the code Charlie wrote for boombox on Github.</li>
+<li>If the structure or content of the template needs to be update, go to <a href="http://Carbone.io">Carbone.io</a></li>
+</ul>
+<h3 id="carbone.io"><a href="http://Carbone.io">Carbone.io</a></h3>
+<p>The trickiest part of getting data into the template is figuring out how to tell Carbone exactly where to find the data.  Every place where Carbone tries to insert data has a phrase enclsoed with curly braces <code>{}</code>.   The phrase inside tells Carbone the path to the data requested.</p>
+<p>It is important to remember that the lenght of phrase might be much longer than the data that will replace it.  Always look at the finished product when adjusting formatting, not the distorteed template.</p>
+<p>The phrase will look similar to this: <code>{d.R.product.Formula.full_formula_name}</code></p>
+<p>It consists of a few important parts:</p>
+<ul>
+<li><code>d</code> is the root data object, it will be at the start of every data request.
+<ul>
+<li><code>d</code> has a property for every column in the Grist table it came from</li>
+<li>a property is the piece after the dot and describes some particular piece of information about that element of the phrase
+<ul>
+<li>eg. in the data structure <code>d.R.label.color</code> we would say that `label’ has a property represending it’s color.</li>
+<li>it’s important to remember that these are instructions on how to look up data.  Carbone is looking for a column in Grist called ‘color’.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>R</code> is actually a column in the Grist production planner sheet
+<ul>
+<li>it’s hidden so that it won’t acciedentally get changed.</li>
+<li><code>R</code> has instructions to Carbone to go get all the other data that the production planner sheet references and package it all up.</li>
+<li>The production planner sheet does not have the thermal processes directly in it, but because <code>R</code> goes to find them this data becomes accessible in Carbone.</li>
+</ul>
+</li>
+<li><code>Product</code> is a row in another sheet that <code>R</code> packaged up.
+<ul>
+<li>the Production Planner sheet has a drop down to select flavor, <code>R</code> followed this back to the <code>Product</code> sheet and got the data for the right row</li>
+</ul>
+</li>
+<li><code>Formula</code> is the same;  the <code>Product</code> sheet had a drop down that linked it to a particular formula.  <code>R</code> followed the connections and bundled it all up.</li>
+</ul>
+<p>It helps to see the whole tree of data to find what you need to insert into the template.  You can do this by going to the right hand pane in the <code>Production Planner</code> sheet and copying the text out of the text box.  Paste that text into <a href="https://jsonformatter.curiousconcept.com/">this JSON viewer</a>, then hit “process”.</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+</div>
+</body>
+
+</html>
